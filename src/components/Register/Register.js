@@ -20,16 +20,14 @@ export default function Register() {
     }
 
     const handleRegister = () => {
-        console.log('user: ', user);
         if (!user.name || !user.emailId || !user.password) {
             alert("Please fill the required fields")
         } else {
             axios.post("http://localhost:4200/users", user).then((response) => {
                 if (response.status === 201) {
                     navigate("/login")
-                    console.log('response: Success', response);
                 } else {
-                    console.log('response: Error', response);
+                    alert("Unable to process your request")
                 }
             })
         }

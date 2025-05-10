@@ -22,7 +22,6 @@ export default function Login() {
     const getAllUsers = async () => {
         let dbUsers = []
         await axios.get("http://localhost:4200/users").then((response) => {
-            console.log('response: ', response);
             if (response.status === 200) {
                 dbUsers = response.data;
             } else {

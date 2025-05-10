@@ -38,7 +38,7 @@ export default function BlogsList() {
                     <hr className="border-gray-500" />
                 </div>
                 {blogs.map((singleBlog) => {
-                    return <BlogCard blog={singleBlog} getAllBlogs={getAllBlogs}/>
+                    return <BlogCard allBlogs={blogs} blog={singleBlog} getAllBlogs={getAllBlogs} />
                 })}
             </div>
         </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export default function BlogCard({ blog, getAllBlogs }) {
+export default function BlogCard({ allBlogs, blog, getAllBlogs }) {
     const navigate = useNavigate();
     let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
@@ -20,22 +20,28 @@ export default function BlogCard({ blog, getAllBlogs }) {
     }
 
     const handleLikesDislikes = (reaction) => {
-        let users = [...blog[reaction]];
-        if (users.includes(loggedInUser.id)) {
-            return;
-        } else {
-            users.push(loggedInUser.id)
-            let request = {
-                [reaction]: users
-            }
-            axios.patch(`http://localhost:4200/blogs/${blog.id}`, request).then((response) => {
-                if (response.status === 200) {
-                    getAllBlogs();
-                } else {
-                    alert(`Unable to ${reaction} the blog`)
-                }
-            })
+        let dislikeUsers = [...blog.dislikes]
+        let likeUsers = [...blog.likes]
+        if (reaction === "likes") {
+            let index = dislikeUsers.findIndex((singleUser) => singleUser === loggedInUser.id)
+            dislikeUsers.splice(index, 1);
+            !likeUsers.includes(loggedInUser.id) && likeUsers.push(loggedInUser.id)
+        } else if (reaction === "dislikes") {
+            let index = likeUsers.findIndex((singleUser) => singleUser === loggedInUser.id)
+            likeUsers.splice(index, 1);
+            !dislikeUsers.includes(loggedInUser.id) && dislikeUsers.push(loggedInUser.id)
         }
+        let request = {
+            likes: likeUsers,
+            dislikes: dislikeUsers
+        }
+        axios.patch(`http://localhost:4200/blogs/${blog.id}`, request).then((response) => {
+            if (response.status === 200) {
+                getAllBlogs();
+            } else {
+                alert(`Unable to ${reaction} the blog`)
+            }
+        })
     }
 
 
@@ -52,9 +58,9 @@ export default function BlogCard({ blog, getAllBlogs }) {
                         <button className="bg-green-500 text-white px-2 py-1 rounded-[3px]" onClick={() => handleLikesDislikes("likes")}><i class="fa fa-thumbs-up mx-1" aria-hidden="true" />{blog.likes.length}</button>
                         <button className="bg-yellow-400 text-white px-2 py-1 rounded-[3px]" onClick={() => handleLikesDislikes("dislikes")}><i class="fa fa-thumbs-down mx-1" aria-hidden="true" />{blog.dislikes.length}</button>
                     </div>
-                    {loggedInUser.emailId === blog.createdBy && <div className="flex gap-2">
-                        <button className="bg-gray-400 text-white px-2 py-1 rounded-[3px]"><i class="fa fa-pencil mx-1" aria-hidden="true" onClick={() => navigate(`/blog/${blog.id}?`)} />Edit</button>
-                        <button className="bg-red-500 text-white px-2 py-1 rounded-[3px]"><i class="fa fa-trash mx-1" aria-hidden="true" onClick={handleBlogDelete} />Delete</button>
+                    {loggedInUser.emailId === blog.createdBy && allBlogs.length > 1 && <div className="flex gap-2">
+                        <button className="bg-gray-400 text-white px-2 py-1 rounded-[3px]" onClick={() => navigate(`/blog/${blog.id}?`)} ><i class="fa fa-pencil mx-1" aria-hidden="true" />Edit</button>
+                        <button className="bg-red-500 text-white px-2 py-1 rounded-[3px]" onClick={handleBlogDelete} ><i class="fa fa-trash mx-1" aria-hidden="true" />Delete</button>
                     </div>}
                 </div>
             </div>
