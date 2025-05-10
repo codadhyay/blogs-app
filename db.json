@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": "182f",
+      "name": "Ishwari Kanase",
+      "emailId": "ishwari.kanase@gmail.com",
+      "password": "Test123"
+    },
+    {
+      "id": "5770",
+      "name": "",
+      "emailId": "ishwari.kanase@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "711c",
+      "name": "opk",
+      "emailId": "ishwari.kanase@gmail.com",
+      "password": "1234"
+    }
+  ]
+}
