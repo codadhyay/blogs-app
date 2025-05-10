@@ -28,8 +28,8 @@ export default function CreateEditPost() {
     const [blog, setBlog] = useState({
         title: "",
         description: "",
-        likes: 0,
-        dislikes: 0,
+        likes: [],
+        dislikes: [],
         createdBy: loggedInUser.emailId,
         createdAt: new moment().format("LLL")
     })

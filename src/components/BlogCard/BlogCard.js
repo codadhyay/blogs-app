@@ -19,6 +19,26 @@ export default function BlogCard({ blog, getAllBlogs }) {
         }
     }
 
+    const handleLikesDislikes = (reaction) => {
+        let users = [...blog[reaction]];
+        if (users.includes(loggedInUser.id)) {
+            return;
+        } else {
+            users.push(loggedInUser.id)
+            let request = {
+                [reaction]: users
+            }
+            axios.patch(`http://localhost:4200/blogs/${blog.id}`, request).then((response) => {
+                if (response.status === 200) {
+                    getAllBlogs();
+                } else {
+                    alert(`Unable to ${reaction} the blog`)
+                }
+            })
+        }
+    }
+
+
     return (
         <div>
             <div className=" border border-gray-400 p-2 my-2 bg-white rounded-[3px]">
@@ -29,8 +49,8 @@ export default function BlogCard({ blog, getAllBlogs }) {
                 <div>{blog.description}</div>
                 <div className="flex justify-between my-2">
                     <div className="flex gap-2">
-                        <button className="bg-green-500 text-white px-2 py-1 rounded-[3px]"><i class="fa fa-thumbs-up mx-1" aria-hidden="true" />{blog.likes}</button>
-                        <button className="bg-yellow-400 text-white px-2 py-1 rounded-[3px]"><i class="fa fa-thumbs-down mx-1" aria-hidden="true" />{blog.dislikes}</button>
+                        <button className="bg-green-500 text-white px-2 py-1 rounded-[3px]" onClick={() => handleLikesDislikes("likes")}><i class="fa fa-thumbs-up mx-1" aria-hidden="true" />{blog.likes.length}</button>
+                        <button className="bg-yellow-400 text-white px-2 py-1 rounded-[3px]" onClick={() => handleLikesDislikes("dislikes")}><i class="fa fa-thumbs-down mx-1" aria-hidden="true" />{blog.dislikes.length}</button>
                     </div>
                     {loggedInUser.emailId === blog.createdBy && <div className="flex gap-2">
                         <button className="bg-gray-400 text-white px-2 py-1 rounded-[3px]"><i class="fa fa-pencil mx-1" aria-hidden="true" onClick={() => navigate(`/blog/${blog.id}?`)} />Edit</button>
