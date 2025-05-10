@@ -10,7 +10,7 @@ import CreateEditPost from '../CreateEditPost/CreateEditPost';
 
 function App() {
   return (
-    <div className='h-screen bg-[#dcdcdc]'>
+    <div className='min-h-screen h-[100%] bg-[#dcdcdc]'>
       <BrowserRouter>
         <Header />
         <Routes>
@@ -18,7 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/blogsList" element={<BlogsList />} />
-          <Route path="/blog" element={<CreateEditPost />} />
+          <Route path="/blog/:blogId?" element={<CreateEditPost />} />
         </Routes>
       </BrowserRouter>
     </div>

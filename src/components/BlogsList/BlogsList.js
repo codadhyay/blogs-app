@@ -1,8 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import BlogCard from "../BlogCard/BlogCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function BlogsList() {
     const navigate = useNavigate();
+
+    const [blogs, setBlogs] = useState([]);
+
+    useEffect(() => {
+        getAllBlogs();
+    }, [])
+
+
+    const getAllBlogs = () => {
+        axios.get("http://localhost:4200/blogs").then((response) => {
+            if (response.status === 200) {
+                setBlogs(response.data)
+            } else {
+                alert("Unable to process your request")
+            }
+        })
+    }
 
     return (
         <div className="flex justify-center">
@@ -18,7 +37,9 @@ export default function BlogsList() {
                     </div>
                     <hr className="border-gray-500" />
                 </div>
-                <BlogCard />
+                {blogs.map((singleBlog) => {
+                    return <BlogCard blog={singleBlog} getAllBlogs={getAllBlogs}/>
+                })}
             </div>
         </div>
     )
